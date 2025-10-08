@@ -8,5 +8,5 @@ export default {
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  tablesFilter: ["progress-tracker_*"],
+  tablesFilter: ["progress-tracker_posts"],
 } satisfies Config;

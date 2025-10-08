@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import { Header } from "~/app/_components/layout/header";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -21,6 +22,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable}`}>
+      <Header />
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>

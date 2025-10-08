@@ -13,7 +13,7 @@ import { index, pgTableCreator } from "drizzle-orm/pg-core";
 export const createTable = pgTableCreator((name) => `progress-tracker_${name}`);
 
 export const posts = createTable(
-  "post",
+  "posts",
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
     name: d.varchar({ length: 256 }),
