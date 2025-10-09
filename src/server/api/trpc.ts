@@ -94,6 +94,7 @@ const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
   const result = await next({
     ctx: {
       ...ctx,
+      session: { ...ctx.session, user: ctx.session?.user },
     },
   });
 
