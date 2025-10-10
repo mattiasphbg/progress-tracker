@@ -51,8 +51,8 @@ export function Header() {
 
           <div className="flex items-center gap-3">
             <SignedOut>
-              <SignInButton />
-              <SignUpButton>
+              <SignInButton forceRedirectUrl={"/dashboard"} />
+              <SignUpButton forceRedirectUrl={"/dashboard"}>
                 <button className="h-10 cursor-pointer rounded-full bg-[#6c47ff] px-4 text-sm font-medium text-white sm:h-12 sm:px-5 sm:text-base">
                   Sign Up
                 </button>

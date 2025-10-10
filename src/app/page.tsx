@@ -8,9 +8,9 @@ import { FeaturesSection } from "~/app/_components/homepage/features-section";
 import { HowItWorksSection } from "~/app/_components/homepage/how-it-works-section";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
+  // const hello = await api.post.hello({ text: "from tRPC" });
 
-  void api.post.getLatest.prefetch();
+  // void api.post.getLatest.prefetch();
 
   return (
     <HydrateClient>
