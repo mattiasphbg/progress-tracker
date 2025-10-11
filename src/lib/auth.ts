@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
+import { TRPCError } from "@trpc/server";
 import { redirect } from "next/navigation";
 
 export type AuthSession = {
@@ -37,4 +38,23 @@ export const checkAuth = async () => {
   if (!userId) {
     redirect("/sign-in");
   }
+};
+
+export const getUserId = async (ctx: {
+  session?: {
+    user?: {
+      id?: string;
+      name?: string;
+      lastName?: string;
+      email?: string;
+      username?: string;
+      img?: string;
+    };
+  };
+}) => {
+  const userId = ctx.session?.user?.id;
+  if (!userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return userId;
 };
