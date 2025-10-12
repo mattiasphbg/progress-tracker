@@ -2,7 +2,6 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { goals } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
-import { TRPCError } from "@trpc/server";
 import { getUserId } from "~/lib/auth";
 
 const createGoalSchema = z.object({

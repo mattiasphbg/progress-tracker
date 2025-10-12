@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -19,7 +19,9 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import CreateGoals from "~/app/_components/dashboard/create-goals";
+import CreateGoals, {
+  type CreateGoalSchema,
+} from "~/app/_components/dashboard/create-goals";
 import {
   Dialog,
   DialogContent,
@@ -27,22 +29,22 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 
+import type { UpdateGoalSchema, UpdateGoalWithId } from "./update-goals";
+import UpdateGoals from "./update-goals";
+
 export function GoalsList({
   goals,
   createGoal,
+  updateGoal,
 }: {
   goals: Goal[];
-  createGoal: (data: {
-    name: string;
-    startDate: Date;
-    targetDate: Date;
-    status: "active" | "completed" | "paused";
-    description?: string;
-  }) => void;
+  createGoal: (data: CreateGoalSchema) => void;
+  updateGoal: (data: UpdateGoalWithId) => void;
 }) {
   const [activeTab, setActiveTab] = useState("active");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const selectedGoalRef = useRef<Goal | null>(null);
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
@@ -77,6 +79,23 @@ export function GoalsList({
                 onGoalCreation={(data) => {
                   createGoal(data);
                   setIsCreateDialogOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={isUpdateDialogOpen}
+            onOpenChange={setIsUpdateDialogOpen}
+          >
+            <DialogContent>
+              <DialogTitle>Update Goal</DialogTitle>
+              <UpdateGoals
+                onGoalUpdate={(data) => {
+                  if (selectedGoalRef.current?.id) {
+                    updateGoal({ ...data, id: selectedGoalRef.current.id });
+                    setIsUpdateDialogOpen(false);
+                  }
+                  setIsUpdateDialogOpen(false);
                 }}
               />
             </DialogContent>
@@ -137,7 +156,14 @@ export function GoalsList({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit Goal</DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setIsUpdateDialogOpen(true);
+                                selectedGoalRef.current = goal;
+                              }}
+                            >
+                              Edit Goal
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Mark Complete</DropdownMenuItem>
                             <DropdownMenuItem className="text-destructive">
                               Delete

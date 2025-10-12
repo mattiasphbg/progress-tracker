@@ -1,17 +1,17 @@
 "use server";
 
+import type { UpdateGoalSchema } from "~/app/_components/dashboard/update-goals";
 import { api } from "~/trpc/server";
 import { revalidatePath } from "next/cache";
-import type { CreateGoalSchema } from "~/app/_components/dashboard/create-goals";
 
-export async function createGoal(data: CreateGoalSchema) {
-  await api.goals.create({
+export async function updateGoal(data: UpdateGoalSchema) {
+  await api.goals.update({
+    id: data.id,
     name: data.name,
     description: data.description,
     startDate: data.startDate,
     targetDate: data.targetDate,
     status: data.status,
   });
-
   revalidatePath("/dashboard");
 }
