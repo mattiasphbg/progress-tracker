@@ -19,9 +19,29 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import CreateGoals from "~/app/_components/dashboard/create-goals";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "~/components/ui/dialog";
 
-export function GoalsList({ goals }: { goals: Goal[] }) {
+export function GoalsList({
+  goals,
+  createGoal,
+}: {
+  goals: Goal[];
+  createGoal: (data: {
+    name: string;
+    startDate: Date;
+    targetDate: Date;
+    status: "active" | "completed" | "paused";
+    description?: string;
+  }) => void;
+}) {
   const [activeTab, setActiveTab] = useState("active");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -41,10 +61,26 @@ export function GoalsList({ goals }: { goals: Goal[] }) {
       <CardHeader className="border-b">
         <CardTitle>Your Goals</CardTitle>
         <CardAction>
-          <Button size="sm" className="gap-2">
-            <Plus className="h-4 w-4" />
-            New Goal
-          </Button>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <Button size="sm" className="gap-2">
+                <Plus className="h-4 w-4" />
+                New Goal
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Create Goal</DialogTitle>
+              <CreateGoals
+                onGoalCreation={(data) => {
+                  createGoal(data);
+                  setIsCreateDialogOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
         </CardAction>
       </CardHeader>
       <CardContent className="p-0">
