@@ -29,7 +29,7 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 
-import type { UpdateGoalSchema, UpdateGoalWithId } from "./update-goals";
+import type { UpdateGoalWithId } from "./update-goals";
 import UpdateGoals from "./update-goals";
 
 export function GoalsList({
@@ -44,6 +44,7 @@ export function GoalsList({
   const [activeTab, setActiveTab] = useState("active");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const selectedGoalRef = useRef<Goal | null>(null);
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -79,6 +80,23 @@ export function GoalsList({
                 onGoalCreation={(data) => {
                   createGoal(data);
                   setIsCreateDialogOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={isUpdateDialogOpen}
+            onOpenChange={setIsUpdateDialogOpen}
+          >
+            <DialogContent>
+              <DialogTitle>Update Goal</DialogTitle>
+              <UpdateGoals
+                onGoalUpdate={(data) => {
+                  if (selectedGoalRef.current?.id) {
+                    updateGoal({ ...data, id: selectedGoalRef.current.id });
+                    setIsUpdateDialogOpen(false);
+                  }
+                  setIsUpdateDialogOpen(false);
                 }}
               />
             </DialogContent>

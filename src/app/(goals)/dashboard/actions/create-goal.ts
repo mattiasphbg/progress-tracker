@@ -2,16 +2,14 @@
 
 import { api } from "~/trpc/server";
 import { revalidatePath } from "next/cache";
-import type { CreateGoalSchema } from "~/app/_components/dashboard/create-goals";
+import {
+  createGoalSchema,
+  type CreateGoalSchema,
+} from "~/app/_components/dashboard/create-goals";
 
 export async function createGoal(data: CreateGoalSchema) {
-  await api.goals.create({
-    name: data.name,
-    description: data.description,
-    startDate: data.startDate,
-    targetDate: data.targetDate,
-    status: data.status,
-  });
+  const validatedData = createGoalSchema.parse(data);
+  await api.goals.create(validatedData);
 
   revalidatePath("/dashboard");
 }

@@ -1,17 +1,22 @@
 "use server";
 
-import type { UpdateGoalSchema } from "~/app/_components/dashboard/update-goals";
 import { api } from "~/trpc/server";
 import { revalidatePath } from "next/cache";
+import z from "zod";
+
+const updateGoalSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1).max(256),
+  description: z.string().optional(),
+  startDate: z.date().optional(),
+  targetDate: z.date().optional(),
+  status: z.enum(["active", "completed", "paused"]).optional(),
+});
+
+type UpdateGoalSchema = z.infer<typeof updateGoalSchema>;
 
 export async function updateGoal(data: UpdateGoalSchema) {
-  await api.goals.update({
-    id: data.id,
-    name: data.name,
-    description: data.description,
-    startDate: data.startDate,
-    targetDate: data.targetDate,
-    status: data.status,
-  });
+  const validatedData = updateGoalSchema.parse(data);
+  await api.goals.update(validatedData);
   revalidatePath("/dashboard");
 }

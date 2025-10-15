@@ -65,4 +65,17 @@ export const goalsRouter = createTRPCRouter({
           ),
         );
     }),
+  delete: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      await getUserId(ctx);
+      await ctx.db
+        .delete(goals)
+        .where(
+          and(
+            eq(goals.id, input.id),
+            eq(goals.clerkUserId, ctx.session?.user?.id ?? ""),
+          ),
+        );
+    }),
 });

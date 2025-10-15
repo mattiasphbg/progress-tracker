@@ -1,3 +1,5 @@
+"use client";
+
 import z from "zod";
 import { ZodProvider } from "@autoform/zod";
 import { AutoForm } from "~/components/ui/autoform";
