@@ -4,6 +4,7 @@ import { ProgressChart } from "~/app/_components/dashboard/progress-chart";
 import { RecentActivity } from "~/app/_components/dashboard/recent-activity";
 import { createGoal } from "./actions/create-goal";
 import { updateGoal } from "./actions/update-goal";
+import { deleteGoal } from "./actions/delate-goal";
 
 import { api } from "~/trpc/server";
 
@@ -31,6 +32,7 @@ export default async function DashboardPage() {
                 goals={goals}
                 createGoal={createGoal}
                 updateGoal={updateGoal}
+                deleteGoal={deleteGoal}
               />
             </div>
             <div className="flex flex-col gap-6">

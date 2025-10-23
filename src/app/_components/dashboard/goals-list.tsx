@@ -27,19 +27,24 @@ import {
   DialogContent,
   DialogTrigger,
   DialogTitle,
+  DialogDescription,
+  DialogFooter,
 } from "~/components/ui/dialog";
 
 import type { UpdateGoalWithId } from "./update-goals";
 import UpdateGoals from "./update-goals";
+import { type DeleteGoalSchema } from "~/app/(goals)/dashboard/actions/delate-goal";
 
 export function GoalsList({
   goals,
   createGoal,
   updateGoal,
+  deleteGoal,
 }: {
   goals: Goal[];
   createGoal: (data: CreateGoalSchema) => void;
   updateGoal: (data: UpdateGoalWithId) => void;
+  deleteGoal: (data: DeleteGoalSchema) => void;
 }) {
   const [activeTab, setActiveTab] = useState("active");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -118,6 +123,36 @@ export function GoalsList({
               />
             </DialogContent>
           </Dialog>
+          <Dialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <DialogContent>
+              <DialogTitle>Delete Goal</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this goal?
+              </DialogDescription>
+              <DialogFooter>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    if (selectedGoalRef.current?.id) {
+                      deleteGoal({ id: selectedGoalRef.current.id });
+                      setIsDeleteDialogOpen(false);
+                    }
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDeleteDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </CardAction>
       </CardHeader>
       <CardContent className="p-0">
@@ -183,7 +218,13 @@ export function GoalsList({
                               Edit Goal
                             </DropdownMenuItem>
                             <DropdownMenuItem>Mark Complete</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
+                            <DropdownMenuItem
+                              className="text-destructive"
+                              onClick={() => {
+                                setIsDeleteDialogOpen(true);
+                                selectedGoalRef.current = goal;
+                              }}
+                            >
                               Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
