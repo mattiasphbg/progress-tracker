@@ -4,11 +4,11 @@ import { goals } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { getUserId } from "~/lib/auth";
 
-const createGoalSchema = z.object({
+export const createGoalSchema = z.object({
   name: z.string().min(1, "Name is required").max(256),
   description: z.string().optional(),
-  startDate: z.date(),
-  targetDate: z.date(),
+  startDate: z.coerce.date(),
+  targetDate: z.coerce.date(),
   status: z.enum(["active", "completed", "paused"]),
 });
 
@@ -16,8 +16,8 @@ const updateGoalSchema = z.object({
   id: z.number(),
   name: z.string().min(1).max(256),
   description: z.string().optional(),
-  startDate: z.date().optional(),
-  targetDate: z.date().optional(),
+  startDate: z.coerce.date().optional(),
+  targetDate: z.coerce.date().optional(),
   status: z.enum(["active", "completed", "paused"]).optional(),
 });
 

@@ -2,10 +2,10 @@
 
 import { api } from "~/trpc/server";
 import { revalidatePath } from "next/cache";
-import {
-  createGoalSchema,
-  type CreateGoalSchema,
-} from "~/app/_components/dashboard/create-goals";
+import { createGoalSchema } from "~/server/api/routers/goals";
+import type { z } from "zod";
+
+type CreateGoalSchema = z.infer<typeof createGoalSchema>;
 
 export async function createGoal(data: CreateGoalSchema) {
   const validatedData = createGoalSchema.parse(data);
