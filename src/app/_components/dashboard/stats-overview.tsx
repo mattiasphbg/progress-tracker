@@ -1,41 +1,41 @@
 import { Card, CardContent } from "~/components/ui/card";
-import { Target, TrendingUp, Award, Zap } from "lucide-react";
+import { Target, TrendingUp, Award, CirclePause } from "lucide-react";
+import type { Stats } from "~/app/(goals)/dashboard/page";
 
-const stats = [
-  {
-    icon: Target,
-    label: "Active Goals",
-    value: "12",
-    change: "+2 this week",
-    changeType: "positive" as const,
-  },
-  {
-    icon: TrendingUp,
-    label: "Completion Rate",
-    value: "78%",
-    change: "+5% from last month",
-    changeType: "positive" as const,
-  },
-  {
-    icon: Award,
-    label: "Goals Completed",
-    value: "34",
-    change: "+8 this month",
-    changeType: "positive" as const,
-  },
-  {
-    icon: Zap,
-    label: "Current Streak",
-    value: "15 days",
-    change: "Keep it up!",
-    changeType: "neutral" as const,
-  },
-];
-
-export function StatsOverview() {
+export function StatsOverview({ stats }: { stats: Stats }) {
+  const displayStats = [
+    {
+      icon: Target,
+      label: "Active Goals",
+      value: stats.active.toString(),
+      change: `${stats.total} total`,
+      changeType: "positive" as const,
+    },
+    {
+      icon: TrendingUp,
+      label: "Completion Rate",
+      value: `${stats.completionRate}%`,
+      change: `${stats.completed} completed`,
+      changeType: "positive" as const,
+    },
+    {
+      icon: Award,
+      label: "Goals Completed",
+      value: stats.completed.toString(),
+      change: "Total completed",
+      changeType: "positive" as const,
+    },
+    {
+      icon: CirclePause,
+      label: "Paused Goals",
+      value: stats.paused.toString(),
+      change: `${stats.paused} paused`,
+      changeType: "neutral" as const,
+    },
+  ];
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat, index) => (
+      {displayStats.map((stat, index) => (
         <Card key={index} className="border-border bg-card">
           <CardContent className="flex flex-col gap-3 p-6">
             <div className="flex items-center justify-between">

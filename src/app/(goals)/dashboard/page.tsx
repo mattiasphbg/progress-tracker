@@ -8,8 +8,31 @@ import { deleteGoal } from "./actions/delate-goal";
 
 import { api } from "~/trpc/server";
 
+export type Stats = {
+  active: number;
+  completed: number;
+  paused: number;
+  total: number;
+  completionRate: number;
+};
+
 export default async function DashboardPage() {
   const goals = await api.goals.getAll();
+
+  const stats: Stats = {
+    active: goals.filter((goal) => goal.status === "active").length,
+    completed: goals.filter((goal) => goal.status === "completed").length,
+    paused: goals.filter((goal) => goal.status === "paused").length,
+    total: goals.length,
+    completionRate:
+      goals.length > 0
+        ? Math.round(
+            (goals.filter((goal) => goal.status === "completed").length /
+              goals.length) *
+              100,
+          )
+        : 0,
+  };
 
   return (
     <div className="bg-secondary/20 flex min-h-screen flex-col">
@@ -24,7 +47,7 @@ export default async function DashboardPage() {
             </p>
           </div>
 
-          <StatsOverview />
+          <StatsOverview stats={stats} />
 
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">
